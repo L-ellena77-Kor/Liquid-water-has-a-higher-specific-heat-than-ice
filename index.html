@@ -18,7 +18,7 @@
 :root{
   --bg:#0E1524; --panel:#152036; --deep:#0A101D; --line:#263552;
   --text:#E8EEF8; --muted:#8D9BB5;
-  --ice:#9BE3FF; --water:#4D9BFF; --heat:#FFB547; --bond:#7FE3FF;
+  --ice:#D2E2FF; --water:#4D9BFF; --heat:#FFB547; --bond:#7FE3FF;
   --ask:#C9B8FF; --ans:#FFA8D2;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -28,7 +28,7 @@
   :root:not([data-theme="light"]){ --bg:#0E1524; --panel:#152036; --deep:#0A101D; --line:#263552; --text:#E8EEF8; --muted:#8D9BB5; }
 }
 :root[data-theme="dark"]{ --bg:#0E1524; --panel:#152036; --deep:#0A101D; --line:#263552; --text:#E8EEF8; --muted:#8D9BB5; }
-:root[data-theme="light"]{ --ask:#6E4FD8; --ans:#D2468F; --bg:#EEF2F8; --panel:#FFFFFF; --deep:#DCE3EE; --line:#C9D3E3; --text:#13203A; --muted:#55627A; --ice:#2AA7D6; --water:#2F6FE0; --heat:#E0901A; --bond:#1FA9C9; }
+:root[data-theme="light"]{ --ask:#6E4FD8; --ans:#D2468F; --bg:#EEF2F8; --panel:#FFFFFF; --deep:#DCE3EE; --line:#C9D3E3; --text:#13203A; --muted:#55627A; --ice:#5A6E8F; --water:#2F6FE0; --heat:#E0901A; --bond:#1FA9C9; }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{height:100%;margin:0}
@@ -36,13 +36,14 @@ body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans KR","Appl
 .app{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:12px;padding:12px 18px 8px}
 header{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:14px;min-height:clamp(36px,min(4vw,7vh),62px)}
 .ttl{display:flex;align-items:center;gap:12px;min-width:0}
-h1{margin:0;font-size:clamp(18px,min(2.1vw,4.3vh),40px);font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
+h1{margin:0;font-size:clamp(17px,min(2vw,4.2vh),40px);font-weight:700;letter-spacing:-0.02em;white-space:nowrap}
 h1.swap{animation:swap .5s ease-out}
 @keyframes swap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .tag{flex-shrink:0;white-space:nowrap;font-size:clamp(12px,min(1.15vw,2.1vh),19px);font-weight:700;padding:.18em .8em .18em .18em;border-radius:999px;display:inline-flex;align-items:center;gap:.45em}
 .tag .av{display:inline-block;width:1.9em;height:1.9em;flex-shrink:0}
 .tag .av svg{display:block;width:100%;height:100%}
-.tag.student .av-t,.tag.teacher .av-j{display:none}
+.tag[data-who="s"] .av-t,.tag[data-who="t"] .av-j{display:none}
+.tag[hidden],button[hidden]{display:none}
 .tag.student{background:var(--ask);color:#1A1430}
 .tag.teacher{background:var(--ans);color:#2A0F1E}
 h1.q{color:var(--ask)} h1.a{color:var(--ans)}
@@ -97,10 +98,10 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
 .msg{font-size:clamp(14px,min(2.05vw,3.69vh),33px);font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .msg b{font-variant-numeric:tabular-nums;color:var(--heat)}
 .note{color:var(--muted);font-size:clamp(12px,1vw,16px);white-space:nowrap;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.tabs{display:flex;gap:8px;flex-shrink:0}
-.tabs button{font-size:clamp(11px,min(1.35vw,2.43vh),22px);padding:.35em .9em;color:var(--muted);background:transparent}
+.tabs{display:flex;gap:6px;flex-shrink:0}
+.tabs button{font-size:clamp(13px,min(1.2vw,2.3vh),21px);padding:.35em .75em;color:var(--muted);background:transparent}
 .tabs button[aria-selected="true"]{color:var(--bg);background:var(--ice);border-color:var(--ice)}
-.app{grid-template-rows:auto minmax(0,1fr) auto}
+.app{grid-template-rows:auto minmax(0,1fr) auto;grid-template-columns:minmax(0,1fr)}
 .page{display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-height:0}
 .page[hidden]{display:none}
 .page.revealed .point{opacity:1}
@@ -114,9 +115,42 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
 .info .bar .mlt{background:var(--water)}
 .info .bar .bnd{background:var(--bond);transition:width .3s linear}
 .info .sub{font-size:.7em;color:var(--muted);font-weight:600}
+.info .note100{font-size:clamp(11px,min(1vw,1.9vh),16px);color:var(--muted);white-space:nowrap;margin-top:-4px}
+.info .note100 span{opacity:.8}
 .info .drop{color:var(--bond);font-weight:700;font-size:1.15em}
 .info .split{padding:4px 0 0}
 .note .key{font-size:clamp(12px,1vw,17px)}
+
+.sum{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:clamp(8px,1.6vh,16px);min-height:0}
+.flow{display:grid;grid-template-columns:auto clamp(40px,5vw,80px) minmax(0,1fr);align-items:stretch;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(8px,1.5vh,16px) 18px}
+.src{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:clamp(30px,min(4vw,7vh),64px);line-height:1}
+.src span{font-size:clamp(16px,min(1.8vw,3.2vh),30px);font-weight:700;white-space:nowrap}
+.fork{width:100%;height:100%}
+.dests{display:flex;flex-direction:column;gap:clamp(6px,1.2vh,12px)}
+.dest{display:flex;align-items:center;gap:clamp(10px,1.5vw,24px);background:var(--deep);border-radius:12px;padding:clamp(4px,.8vh,10px) 16px;border-left:7px solid var(--heat);white-space:nowrap}
+.dest.bond{border-left-color:var(--bond)}
+.ics{display:flex;gap:clamp(6px,1vw,16px)}
+.ics figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ics svg{height:clamp(32px,7.5vh,72px);width:auto;aspect-ratio:80/60;display:block}
+.ics figure.w svg{aspect-ratio:100/60}
+.ics figcaption{font-size:clamp(11px,min(1.1vw,1.9vh),17px);color:var(--muted);font-weight:600}
+.dest .t{font-size:clamp(18px,min(2.2vw,3.9vh),36px);font-weight:700}
+.dest .r{margin-left:auto;font-size:clamp(18px,min(2.2vw,3.9vh),36px);font-weight:700}
+.dest.motion .t,.dest.motion .r{color:var(--heat)} .dest.bond .t,.dest.bond .r{color:var(--bond)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-height:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(8px,1.4vh,16px) 18px;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(4px,1vh,10px);min-height:0;overflow:hidden}
+.card.c-ice{border-top:5px solid var(--ice)} .card.c-melt{border-top:5px solid var(--bond)} .card.c-water{border-top:5px solid var(--water)}
+.card h3{margin:0;font-size:clamp(22px,min(2.6vw,4.6vh),42px);white-space:nowrap}
+.c-ice h3{color:var(--ice)} .c-melt h3{color:var(--bond)} .c-water h3{color:var(--water)}
+.card .mv,.card .res{margin:0;font-size:clamp(14px,min(1.55vw,2.8vh),25px);font-weight:600;line-height:1.35;white-space:nowrap}
+.card b.h{color:var(--heat)} .card b.b{color:var(--bond)}
+.card .x{color:var(--muted);font-weight:500}
+.card .res b{font-size:1.2em}
+.card .res small{color:var(--muted);font-size:.75em;margin-left:.3em}
+.concl{text-align:center;font-size:clamp(20px,min(2.6vw,4.6vh),42px);font-weight:700;white-space:nowrap;padding:clamp(4px,.8vh,10px) 0}
+.concl .b{color:var(--bond)}
+@media (max-width:760px){.cards{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.fork{display:none}.dest{flex-wrap:wrap}.concl{white-space:normal}}
+
 @media (max-width:760px){
   .stage.two{grid-template-columns:1fr}
   .panel.info{height:auto}
@@ -135,7 +169,7 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
 <body>
 <div class="app">
   <header>
-    <div class="ttl"><h1 id="title" class="q">왜 물과 얼음의 비열이 다를까요?</h1><span class="tag student" id="ttag"><span class="av av-j"><svg class="avatar" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="지운">
+    <div class="ttl"><h1 id="title" class="q">왜 물과 얼음의 비열이 다를까요?</h1><span class="tag student" id="ttag" data-who="s"><span class="av av-j"><svg class="avatar" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="지운">
   <defs><clipPath id="cj"><circle cx="32" cy="32" r="32"/></clipPath></defs>
   <g clip-path="url(#cj)">
     <circle cx="32" cy="32" r="32" fill="#F4F0FF"/>
@@ -183,7 +217,8 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
     <div class="tabs" role="tablist">
       <button role="tab" id="tab1" aria-selected="true">1. 비열 차이</button>
       <button role="tab" id="tab2" aria-selected="false">2. 녹는 동안</button>
-      <button id="fs" title="전체 화면으로 크게 보기">⛶ 전체 화면</button>
+      <button role="tab" id="tab3" aria-selected="false">3. 원리 정리</button>
+      <button id="fs" title="전체 화면으로 크게 보기" aria-label="전체 화면">⛶</button>
     </div>
   </header>
 
@@ -191,7 +226,7 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
   <main class="stage">
     <section class="panel ice" aria-label="얼음 모형">
       <div class="phead"><h2>얼음 1 kg<span class="cp">비열 0.5 kcal/(kg·℃)</span></h2><div class="temp" id="t-ice">−30.0 ℃</div></div>
-      <div class="view" id="v-ice"><div class="point">구조가 고정 → 열은 <em>진동</em>에만 쓰여요</div><div class="bc">남아 있는 수소 결합 <b id="b-ice">100</b>%</div></div>
+      <div class="view" id="v-ice"><div class="point">열 → 제자리에서 <em>떨기·흔들기</em> → 온도 ↑</div><div class="bc">남아 있는 수소 결합 <b id="b-ice">100</b>%</div></div>
       <div class="split">
         <div class="sh"><span>🔥 가해진 열량 <b id="q-ice">0.0 kcal</b></span><span class="eq">=<span><i class="dot" style="background:var(--heat)"></i>온도 올리기 <b id="lv-ice">0.0</b></span><span>+</span><span><i class="dot" style="background:var(--bond)"></i>결합 끊기 <b id="ls-ice">0.0</b></span></span></div>
         <div class="bar"><i class="vib" id="bv-ice" style="width:0"></i><i class="str" id="bs-ice" style="width:0"></i><span class="end">15 kcal</span></div>
@@ -199,7 +234,7 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
     </section>
     <section class="panel water" aria-label="물 모형">
       <div class="phead"><h2>물 1 kg<span class="cp">비열 1 kcal/(kg·℃)</span></h2><div class="temp" id="t-water">20.0 ℃</div></div>
-      <div class="view" id="v-water"><div class="point">열의 절반은 <em class="h">운동</em>, 절반은 <em class="b">수소 결합 끊기</em></div><div class="bc">남아 있는 수소 결합 <b id="b-water">85</b>%</div></div>
+      <div class="view" id="v-water"><div class="point">열 → <em class="h">이동·회전</em>(온도↑) + <em class="b">결합 끊기</em></div><div class="bc">남아 있는 수소 결합 <b id="b-water">85</b>%</div></div>
       <div class="split">
         <div class="sh"><span>🔥 가해진 열량 <b id="q-water">0.0 kcal</b></span><span class="eq">=<span><i class="dot" style="background:var(--heat)"></i>온도 올리기 <b id="lv-water">0.0</b></span><span>+</span><span><i class="dot" style="background:var(--bond)"></i>결합 끊기 <b id="ls-water">0.0</b></span></span></div>
         <div class="bar"><i class="vib" id="bv-water" style="width:0"></i><i class="str" id="bs-water" style="width:0"></i><span class="end">15 kcal</span></div>
@@ -208,14 +243,13 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
   </main>
 
   <section class="bottom">
-    <div class="chartbox"><canvas id="chart" aria-label="가한 열량에 따른 온도 변화 그래프"></canvas></div>
+    <div class="chartbox"><canvas id="chart" aria-label="같은 열을 넣었을 때 얼음과 물의 올라간 온도 막대그래프"></canvas></div>
     <div class="ctrl">
       <div class="btns">
         <button class="primary" id="heat">가열 시작</button>
         <button id="reset">처음으로</button>
       </div>
       <label class="toggle"><input type="checkbox" id="showBonds" checked>수소 결합 보기</label>
-      <div class="msg" id="msg">가열 시작 → 양쪽에 똑같은 열이 들어가요</div>
     </div>
   </section>
   </div>
@@ -224,15 +258,16 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
   <main class="stage two">
     <section class="panel melt" aria-label="녹는 얼음 모형">
       <div class="phead"><h2>0 ℃ 얼음 1 kg<span class="cp">다 녹이는 데 80 kcal</span></h2></div>
-      <div class="view" id="v-melt"><div class="point" id="m-point">온도 그대로 → 열은 전부 <em class="b">결합 끊기</em>에 쓰여요</div><div class="bc">하늘색으로 감싼 분자 = 아직 얼음</div></div>
+      <div class="view" id="v-melt"><div class="point" id="m-point">온도 그대로 → 열은 전부 <em class="b">결합 끊기</em>에 쓰여요</div><div class="bc">흰빛으로 감싼 분자 = 아직 얼음</div></div>
     </section>
     <section class="panel info" aria-label="온도와 열량">
       <div class="state" id="m-state">얼음</div>
       <div class="bigT" id="m-temp">0.0 ℃</div>
       <div class="row"><span>녹은 비율</span><b id="m-meltpct">0%</b></div>
       <div class="bar"><i class="mlt" id="m-meltbar" style="width:0"></i></div>
-      <div class="row"><span>수소 결합 수 <small class="sub">처음 <span id="m-b0">86</span>개에서 <span class="drop" id="m-drop">0개 줄어듦</span></small></span><b><span id="m-bcount">86</span>개 <small class="sub" id="m-bond">(100%)</small></b></div>
+      <div class="row"><span>수소 결합 수 <small class="sub">처음 <span id="m-b0">100</span>개에서 <span class="drop" id="m-drop">0개 줄어듦</span></small></span><b><span id="m-bcount">100</span>개</b></div>
       <div class="bar"><i class="bnd" id="m-bondbar" style="width:100%"></i></div>
+      <div class="note100">모형 속 결합 100개 기준 <span>(실제 얼음 1 kg에는 약 7×10²⁵개)</span></div>
       <div class="split">
         <div class="sh"><span>🔥 가해진 열량 <b id="q-melt">0.0 kcal</b></span><span class="mx">막대 끝 = 100 kcal</span></div>
         <div class="bar"><i class="vib" id="bv-melt" style="width:0"></i><i class="str" id="bs-melt" style="width:0"></i></div>
@@ -251,6 +286,48 @@ button:focus-visible,.toggle input:focus-visible{outline:3px solid var(--ice);ou
       <div class="msg" id="msg2">가열 시작 → 0 ℃ 얼음에 열이 들어가요</div>
     </div>
   </section>
+  </div>
+
+  <div class="page" id="page3" hidden>
+  <main class="sum">
+    <section class="flow">
+      <div class="src">🔥<span>가해진 열</span></div>
+      <svg class="fork" viewBox="0 0 60 100" preserveAspectRatio="none"><path d="M2 50 C30 50 30 20 56 20 M2 50 C30 50 30 80 56 80" fill="none" stroke="var(--muted)" stroke-width="3"/><path d="M48 13 L57 20 L48 27 M48 73 L57 80 L48 87" fill="none" stroke="var(--muted)" stroke-width="3" stroke-linejoin="round"/></svg>
+      <div class="dests">
+        <div class="dest motion">
+          <div class="ics"><figure><svg viewBox="0 0 80 60"><circle cx="40" cy="28" r="9.0" fill="#ff5d5d"/><circle cx="32.5" cy="34.5" r="5.2" fill="#f2f6ff"/><circle cx="47.5" cy="34.5" r="5.2" fill="#f2f6ff"/><path d="M20 18 L15 28 L20 38 M60 18 L65 28 L60 38" fill="none" stroke="#FFB547" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><figcaption>떨기</figcaption></figure><figure><svg viewBox="0 0 80 60"><circle cx="28" cy="28" r="9.0" fill="#ff5d5d"/><circle cx="20.5" cy="34.5" r="5.2" fill="#f2f6ff"/><circle cx="35.5" cy="34.5" r="5.2" fill="#f2f6ff"/><path d="M44 30 H70 M62 22 L70 30 L62 38" fill="none" stroke="#FFB547" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 22 H12 M2 30 H10 M4 38 H12" stroke="#FFB547" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></svg><figcaption>이동</figcaption></figure><figure><svg viewBox="0 0 80 60"><circle cx="40" cy="28" r="9.0" fill="#ff5d5d"/><circle cx="32.5" cy="34.5" r="5.2" fill="#f2f6ff"/><circle cx="47.5" cy="34.5" r="5.2" fill="#f2f6ff"/><path d="M58 16 A22 22 0 1 1 46 8" fill="none" stroke="#FFB547" stroke-width="3" stroke-linecap="round"/><path d="M45 2 L51 9 L43 13" fill="none" stroke="#FFB547" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><figcaption>회전</figcaption></figure></div>
+          <div class="t">입자 운동</div>
+          <div class="r">온도가 오른다 ↑</div>
+        </div>
+        <div class="dest bond">
+          <div class="ics"><figure class="w"><svg viewBox="0 0 100 60"><circle cx="16" cy="26" r="9.0" fill="#ff5d5d"/><circle cx="8.5" cy="32.5" r="5.2" fill="#f2f6ff"/><circle cx="23.5" cy="32.5" r="5.2" fill="#f2f6ff"/><circle cx="84" cy="26" r="9.0" fill="#ff5d5d"/><circle cx="76.5" cy="32.5" r="5.2" fill="#f2f6ff"/><circle cx="91.5" cy="32.5" r="5.2" fill="#f2f6ff"/><path d="M27 26 H41 M59 26 H73" stroke="#7FE3FF" stroke-width="4" stroke-linecap="round"/><path d="M50 14 L52.5 22 L60 24 L52.5 27 L50 36 L47.5 27 L40 24 L47.5 22 Z" fill="#7FE3FF"/></svg><figcaption>결합 끊기</figcaption></figure></div>
+          <div class="t">수소 결합 끊기</div>
+          <div class="r">온도는 그대로 →</div>
+        </div>
+      </div>
+    </section>
+    <section class="cards">
+      <article class="card c-ice">
+        <h3>얼음</h3>
+        <p class="mv">제자리에서 <b class="h">떨기·흔들기</b>만<br><span class="x">자리를 옮길 수 없어요</span></p>
+        <div class="bar"><i class="vib" style="width:100%"></i></div>
+        <p class="res">열이 전부 운동으로<br><b>온도가 잘 오른다</b> <small>비열 0.5</small></p>
+      </article>
+      <article class="card c-melt">
+        <h3>녹는 중 (0 ℃)</h3>
+        <p class="mv"><b class="b">결합이 끊어지며</b> 떨어져 나감<br><span class="x">운동은 그대로예요</span></p>
+        <div class="bar"><i class="str" style="width:100%"></i></div>
+        <p class="res">열이 전부 결합 끊기로<br><b>온도가 그대로</b> <small>80 kcal</small></p>
+      </article>
+      <article class="card c-water">
+        <h3>물</h3>
+        <p class="mv"><b class="h">이동·회전·떨기</b> + <b class="b">결합 끊기</b><br><span class="x">결합이 끊어졌다 생겼다 해요</span></p>
+        <div class="bar"><i class="vib" style="width:50%"></i><i class="str" style="width:50%"></i></div>
+        <p class="res">열의 절반만 운동으로<br><b>온도가 덜 오른다</b> <small>비열 1</small></p>
+      </article>
+    </section>
+    <div class="concl"><span class="b">결합을 끊는 데 쓰인 열</span>은 온도를 올리지 않는다</div>
+  </main>
   </div>
 
   <div class="note">
@@ -434,8 +511,8 @@ const ice = (function(){
 })();
 
 /* ---------- 물: 수소 결합이 끊어지고 다시 생기는 액체 ---------- */
-const water = (function(){
-  const v = makeView($('#v-water'), 9.0);
+function makeWater(el, o){
+  const v = makeView(el, 9.0);
   const n = 64, half = 6.1;
   const pos = [], vel = [], ori = [], ang = [];
   const bonded = new Uint8Array(n*n), cnt = new Uint8Array(n);
@@ -446,9 +523,8 @@ const water = (function(){
   let bondList = [], acc = 0, prevNb = 260;
 
   function fFrac(){
-    const struct = Q * (1 - VIB_SHARE), maxS = QMAX * (1 - VIB_SHARE);
     // 얼음(모든 결합 유지)=100% 기준, 물은 약 85%에서 시작해 가열하면 줄어듦(감소 폭은 과장)
-    return 0.85 - 0.20 * Math.min(1, struct / maxS);
+    return 0.85 - 0.20 * Math.min(1, o.struct());
   }
   function init(){
     pos.length = vel.length = ori.length = ang.length = 0; bonded.fill(0); cnt.fill(0);
@@ -461,7 +537,7 @@ const water = (function(){
     for(let s=0;s<360;s++) step(1/60);
   }
   function step(dt){
-    const s = visScale('water'), f = fFrac();
+    const s = o.vis(), f = fFrac();
     let total = 0; for(let i=0;i<n;i++) total += cnt[i]; total /= 2;
     const target = f * 2 * n;                 // 분자당 최대 결합 2개(손 4개를 둘이 나눔) 기준
     const err = (target - total) / target;    // 목표보다 적으면 더 잘 생기고, 많으면 더 잘 끊어짐
@@ -517,7 +593,7 @@ const water = (function(){
   }
   function update(t, dt){
     step(dt * .5); step(dt * .5);
-    if(heating){
+    if(o.heating()){
       acc += PACKETS * dt;
       while(acc >= 1){
         acc--;
@@ -544,7 +620,8 @@ const water = (function(){
   }
   init();
   return {update, init};
-})();
+}
+const water = makeWater($('#v-water'), {vis: () => visScale('water'), struct: () => Q / QMAX, heating: () => heating});
 
 /* ---------- 그래프 ---------- */
 const chart = $('#chart'), ctx = chart.getContext('2d');
@@ -556,30 +633,50 @@ function sizeChart(){
 new ResizeObserver(sizeChart).observe(chart); sizeChart();
 function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function drawChart(){
+  // 1쪽: 같은 열을 넣었을 때 '올라간 온도'를 가로 막대로 비교 (세로축을 온도로 오해하지 않도록)
   const w = chart.clientWidth, h = chart.clientHeight; if(!w || !h) return;
-  ctx.clearRect(0, 0, w, h);
-  const fs = Math.max(11, Math.min(20, w / 34, h / 9));
-  const L = fs*3.6, R = fs*8.2, T = fs*1.2, B = fs*2.8;
-  const pw = w - L - R, phh = h - T - B;
-  const X = q => L + q / QMAX * pw, Y = d => T + phh - d / 30 * phh;
-  ctx.font = `${fs}px "IBM Plex Sans KR", sans-serif`;
-  ctx.strokeStyle = css('--line'); ctx.fillStyle = css('--muted'); ctx.lineWidth = 1;
-  ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-  for(const d of [0,10,20,30]){ ctx.beginPath(); ctx.moveTo(L, Y(d)); ctx.lineTo(L+pw, Y(d)); ctx.stroke(); ctx.fillText('+' + d, L - 6, Y(d)); }
-  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-  for(const q of [0,5,10,15]) ctx.fillText(q, X(q), T + phh + 5);
-  ctx.fillText('가한 열량 (kcal)', L + pw/2, T + phh + fs*1.45);
-  ctx.save(); ctx.translate(fs*.9, T + phh/2); ctx.rotate(-Math.PI/2); ctx.textBaseline = 'middle'; ctx.fillText('온도 변화 (℃)', 0, 0); ctx.restore();
-  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  for(const [k, col, name] of [['ice', css('--ice'), '얼음'], ['water', css('--water'), '물']]){
-    const x1 = X(Q), y1 = Y(dT(k));
-    const ly = k === 'ice' ? Math.min(y1, Y(dT('water')) - fs*1.5) : y1;
-    ctx.strokeStyle = col; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(x1, y1); ctx.stroke();
-    ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x1, y1, 5, 0, Math.PI*2); ctx.fill();
-    ctx.font = `700 ${fs*1.2}px "IBM Plex Sans KR", sans-serif`;
-    ctx.fillText(`${name} +${dT(k).toFixed(1)}℃`, x1 + 10, ly);
-    ctx.font = `${fs}px "IBM Plex Sans KR", sans-serif`;
+  const g = ctx; g.clearRect(0, 0, w, h);
+  const fs = Math.max(12, Math.min(22, w / 32, h / 7.5));
+  const font = (wt, k) => `${wt} ${fs*k}px "IBM Plex Sans KR", sans-serif`;
+  // 제목 줄
+  g.textBaseline = 'middle'; g.textAlign = 'left';
+  const ty = fs * 1.15, tx = fs * 0.9;
+  if(Q > 0){
+    g.font = font(600, 1.05); g.fillStyle = css('--text');
+    const a = '같은 열 ', b = `${Q.toFixed(1)} kcal`, c = '를 넣었을 때 올라간 온도';
+    g.fillText(a, tx, ty); let x = tx + g.measureText(a).width;
+    g.font = font(700, 1.05); g.fillStyle = css('--heat'); g.fillText(b, x, ty); x += g.measureText(b).width;
+    g.font = font(600, 1.05); g.fillStyle = css('--text'); g.fillText(c, x, ty);
+    if(Q > 0.3){ g.textAlign = 'right'; g.font = font(700, 1.05); g.fillStyle = css('--heat'); g.fillText('얼음이 물의 2배!', w - tx, ty); }
+  } else {
+    g.font = font(600, 1.05); g.fillStyle = css('--muted');
+    g.fillText('같은 열을 넣으면, 온도는 얼마나 올라갈까?', tx, ty);
   }
+  // 막대 영역
+  g.font = font(700, 1.2);
+  const L = tx + Math.max(g.measureText('얼음').width, g.measureText('물').width) + fs * 0.9;
+  const R = g.measureText('+30.0 ℃').width + fs * 1.2;
+  const T = fs * 2.4, B = fs * 1.9;
+  const pw = w - L - R, ph = h - T - B;
+  const X = d => L + d / 30 * pw;
+  // 눈금
+  g.font = font(500, 0.9); g.textAlign = 'center'; g.textBaseline = 'top';
+  for(const d of [0,10,20,30]){
+    g.strokeStyle = css('--line'); g.lineWidth = 1;
+    g.beginPath(); g.moveTo(X(d), T - fs*.2); g.lineTo(X(d), T + ph); g.stroke();
+    g.fillStyle = css('--muted'); g.fillText(d === 30 ? '30 ℃' : String(d), X(d), T + ph + 4);
+  }
+  // 막대 2개
+  const rowH = ph / 2, bh = Math.min(rowH * 0.62, fs * 2.2);
+  const rr = (x, y, ww, hh, r) => { r = Math.min(r, hh/2, ww/2); g.beginPath(); g.moveTo(x+r, y); g.arcTo(x+ww, y, x+ww, y+hh, r); g.arcTo(x+ww, y+hh, x, y+hh, r); g.arcTo(x, y+hh, x, y, r); g.arcTo(x, y, x+ww, y, r); g.closePath(); };
+  [['ice', '얼음', css('--ice')], ['water', '물', css('--water')]].forEach(([k, name, col], i) => {
+    const cy = T + rowH * (i + .5), y = cy - bh/2, d = dT(k);
+    g.fillStyle = css('--deep'); rr(X(0), y, pw, bh, 6); g.fill();
+    if(d > 0.01){ g.fillStyle = col; rr(X(0), y, Math.max(2, X(d) - X(0)), bh, 6); g.fill(); }
+    g.textBaseline = 'middle'; g.font = font(700, 1.2);
+    g.textAlign = 'right'; g.fillStyle = col; g.fillText(name, L - fs*.6, cy);
+    g.textAlign = 'left'; g.fillText(`+${d.toFixed(1)} ℃`, X(d) + fs*.5, cy);
+  });
 }
 
 
@@ -592,14 +689,22 @@ const bondPct2 = () => Q2 <= QMELT ? 100 - 12 * meltFrac() : 88 - 3 * (Q2 - QMEL
 const heatToTemp2 = () => Math.max(0, Q2 - QMELT) * VIB_SHARE;
 
 const melt = (function(){
-  const v = makeView($('#v-melt'));
+  const v = makeView($('#v-melt'), 11.0);
   const a = 6.4, fcc = [[0,0,0],[0,.5,.5],[.5,0,.5],[.5,.5,0]];
+  // 수소 결합이 정확히 100개인 얼음 조각: 큰 격자에서 가운데부터 분자를 하나씩 더하며 결합 수를 맞춤
+  const all = [];
+  for(let i=-2;i<2;i++) for(let j=-2;j<2;j++) for(let k=-2;k<2;k++) for(const b of fcc) for(let t=0;t<2;t++)
+    all.push({p: new THREE.Vector3((i+b[0]+t*.25)*a, (j+b[1]+t*.25)*a, (k+b[2]+t*.25)*a), t});
+  all.sort((x, y) => x.p.length() - y.p.length());
   const sites = [], type = [];
-  for(let i=0;i<2;i++) for(let j=0;j<2;j++) for(let k=0;k<2;k++) for(const b of fcc) for(let t=0;t<2;t++){
-    sites.push(new THREE.Vector3((i+b[0]+t*.25)*a, (j+b[1]+t*.25)*a, (k+b[2]+t*.25)*a)); type.push(t);
+  let nbond = 0;
+  for(const s of all){
+    const add = sites.reduce((m, q) => m + (q.distanceTo(s.p) < 3.2 ? 1 : 0), 0);
+    if(nbond + add > 100) continue;
+    sites.push(s.p); type.push(s.t); nbond += add;
+    if(nbond === 100) break;
   }
-  const c = new THREE.Vector3(); sites.forEach(s => c.add(s)); c.divideScalar(sites.length); sites.forEach(s => s.sub(c));
-  const n = sites.length, half = 6.1;
+  const n = sites.length, half = 6.5;
   const tet = [[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]].map(x => new THREE.Vector3(...x).normalize());
   const hd = [], ph = [];
   for(let i=0;i<n;i++){
@@ -620,7 +725,7 @@ const melt = (function(){
   const MAXB = 300;
   const M = makeMeshes(v.root, n, MAXB);
   // 아직 얼음(격자)인 분자 표시용 반투명 껍질
-  const shellMat = new THREE.MeshBasicMaterial({color:0x9BE3FF, transparent:true, opacity:.16, depthWrite:false});
+  const shellMat = new THREE.MeshBasicMaterial({color:0xD2E2FF, transparent:true, opacity:.16, depthWrite:false});
   const shells = makePool(v.root, new THREE.SphereGeometry(1.35,18,12), shellMat, n, true);
   const sparks = makeSparks(v.root);
   const pos = sites.map(s => s.clone()), vel = sites.map(() => new THREE.Vector3());
@@ -683,7 +788,7 @@ const melt = (function(){
     let total = 0; for(let i=0;i<n;i++) total += cnt[i]; total /= 2;
     const target = LAT0 * bondPct2() / 100;   // 처음(얼음) 결합 수 기준으로 남아야 할 결합 수
     const err = (target - total) / target;
-    const kf = err > 0 ? 1.4 * (0.6 + 30 * err) : 0, kb = 1.4 * (0.08 + 10 * Math.max(0, -err)) * s / 1.6;
+    const kf = err > 0 ? 1.4 * (0.8 + 40 * err) : 0, kb = 1.4 * (0.04 + 10 * Math.max(0, -err)) * s / 1.6;
     for(let i=0;i<n;i++){
       const pi = pos[i];
       for(let j=i+1;j<n;j++){
@@ -806,7 +911,6 @@ function updateUI2(){
   const bc = Math.round(nbAvg2);
   $('#m-bcount').textContent = bc;
   $('#m-drop').textContent = Math.max(0, melt.lat0 - bc) + '개 줄어듦';
-  $('#m-bond').textContent = '(' + Math.round(bc / melt.lat0 * 100) + '%)';
   $('#m-bondbar').style.width = (bc / melt.lat0 * 100) + '%';
   const tv = heatToTemp2(), sv = Q2 - tv;
   $('#q-melt').textContent = Q2.toFixed(1) + ' kcal';
@@ -841,10 +945,6 @@ function updateUI(){
   $('#q-ice').textContent = $('#q-water').textContent = Q.toFixed(1) + ' kcal';
   $('#lv-ice').textContent = iv.toFixed(1); $('#ls-ice').textContent = '0.0';
   $('#lv-water').textContent = wv.toFixed(1); $('#ls-water').textContent = ws.toFixed(1);
-  const msg = $('#msg');
-  if(Q >= QMAX) msg.innerHTML = `같은 15 kcal → 얼음 <b>+30 ℃</b>, 물 <b>+${dT('water').toFixed(0)} ℃</b> (절반!)`;
-  else if(Q > 0) msg.innerHTML = `같은 열 <b>${Q.toFixed(1)} kcal</b> → 얼음 <b>+${dT('ice').toFixed(1)} ℃</b>, 물 <b>+${dT('water').toFixed(1)} ℃</b>`;
-  else msg.textContent = '가열 시작 → 양쪽에 똑같은 열이 들어가요';
 }
 
 const heatBtn = $('#heat');
@@ -856,16 +956,26 @@ function setHeating(on){
 heatBtn.addEventListener('click', () => setHeating(!heating));
 $('#reset').addEventListener('click', () => { Q = 0; water.init(); setHeating(false); updateUI(); });
 const TEXTS = {
-  1: {q:'왜 물과 얼음의 비열이 다를까요?', qt:'지운이의 질문', a:'같은 열을 받아도, 얼음과 물은 열을 다르게 쓴단다', at:'선생님의 답'},
-  2: {q:'0 ℃ 얼음이 녹는 동안, 왜 온도는 그대로일까요?', qt:'지운이 질문에서 이어짐', a:'녹는 동안 열은 전부 수소 결합을 끊는 데 쓰인단다', at:'선생님의 답'}
+  1: {q:'왜 물과 얼음의 비열이 다를까요?', qt:'지운이의 질문', qw:'s', a:'같은 열을 받아도, 얼음과 물은 열을 다르게 쓴단다', at:'선생님의 답'},
+  2: {q:'0 ℃ 얼음이 녹는 동안, 왜 온도는 그대로일까요?', qt:'지운이 질문에서 이어짐', qw:'s', a:'녹는 동안 열은 전부 수소 결합을 끊는 데 쓰인단다', at:'선생님의 답'},
+  3: {q:'한눈에 정리: 가해진 열은 어디에 쓰일까?'}
 };
 let page = 1;
 function showTitle(animate){
   const pg = $('#page' + page), on = pg.classList.contains('revealed'), h = $('#title'), btn = $('#reveal');
+  const tgEl = $('#ttag');
+  if(page === 3){
+    h.textContent = TEXTS[3].q; h.classList.remove('a'); h.classList.add('q');
+    tgEl.hidden = true; btn.hidden = true;
+    if(animate){ h.classList.remove('swap'); void h.offsetWidth; h.classList.add('swap'); }
+    return;
+  }
+  tgEl.hidden = false; btn.hidden = false;
   h.textContent = on ? TEXTS[page].a : TEXTS[page].q;
   const tg = $('#ttag');
   $('#ttext').textContent = on ? TEXTS[page].at : TEXTS[page].qt;
   tg.className = 'tag ' + (on ? 'teacher' : 'student');
+  tg.dataset.who = on ? 't' : TEXTS[page].qw;
   h.classList.toggle('q', !on); h.classList.toggle('a', on);
   if(animate){ h.classList.remove('swap'); void h.offsetWidth; h.classList.add('swap'); }
   btn.textContent = on ? '질문 보기' : '답 보기'; btn.setAttribute('aria-expanded', on);
@@ -873,8 +983,7 @@ function showTitle(animate){
 $('#reveal').addEventListener('click', () => { $('#page' + page).classList.toggle('revealed'); showTitle(true); });
 function goPage(p){
   page = p;
-  $('#page1').hidden = p !== 1; $('#page2').hidden = p !== 2;
-  $('#tab1').setAttribute('aria-selected', p === 1); $('#tab2').setAttribute('aria-selected', p === 2);
+  [1,2,3].forEach(k => { $('#page' + k).hidden = p !== k; $('#tab' + k).setAttribute('aria-selected', p === k); });
   if(p !== 1) setHeating(false); if(p !== 2) setHeating2(false);
   showTitle(true); last = performance.now();
 }
@@ -890,17 +999,18 @@ fsBtn.addEventListener('click', () => {
     else (docEl.requestFullscreen || docEl.webkitRequestFullscreen).call(docEl);
   }catch(e){}
 });
-const fsLabel = () => { fsBtn.textContent = fsOn() ? '⛶ 전체 화면 끄기' : '⛶ 전체 화면'; };
+const fsLabel = () => { fsBtn.title = fsOn() ? '전체 화면 끄기' : '전체 화면으로 크게 보기'; };
 document.addEventListener('fullscreenchange', fsLabel);
 document.addEventListener('webkitfullscreenchange', fsLabel);
 $('#tab2').addEventListener('click', () => goPage(2));
-function syncBonds(v){ showBonds = v; $('#showBonds').checked = v; $('#showBonds2').checked = v; }
+$('#tab3').addEventListener('click', () => goPage(3));
+function syncBonds(v){ showBonds = v; ['#showBonds','#showBonds2'].forEach(id => $(id).checked = v); }
 $('#showBonds').addEventListener('change', e => syncBonds(e.target.checked));
 $('#showBonds2').addEventListener('change', e => syncBonds(e.target.checked));
 document.addEventListener('keydown', e => {
   if(e.code !== 'Space' || e.target !== document.body) return;
   e.preventDefault();
-  if(page === 1){ if(Q < QMAX) setHeating(!heating); } else { if(Q2 < QTOT) setHeating2(!heating2); }
+  if(page === 1){ if(Q < QMAX) setHeating(!heating); } else if(page === 2){ if(Q2 < QTOT) setHeating2(!heating2); }
 });
 
 let last = performance.now(), t = 0, nbAvg = 0.85 * 2 * 64, uiTimer = 0, nbAvg2 = melt.lat0;
@@ -916,7 +1026,7 @@ function loop(now){
     nbAvg += (nb - nbAvg) * Math.min(1, dt * 3);
     if(uiTimer > 0.12){ uiTimer = 0; $('#b-water').textContent = Math.round(nbAvg / (2 * 64) * 100); updateUI(); }
     drawChart();
-  } else {
+  } else if(page === 2){
     if(heating2){ Q2 = Math.min(QTOT, Q2 + RATE2 * dt); if(Q2 >= QTOT) setHeating2(false); }
     const nb2 = melt.update(t, dt);
     nbAvg2 += (nb2 - nbAvg2) * Math.min(1, dt * 2.5);
